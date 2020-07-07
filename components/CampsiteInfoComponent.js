@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, ScrollView, FlatList } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
-import {baseUrl} from '../shared/baseUrl';
-
+import { baseUrl } from '../shared/baseUrl';
 
 const mapStateToProps = state => {
     return {
@@ -86,12 +85,12 @@ class CampsiteInfo extends Component {
         const comments = this.props.comments.comments.filter(comment => comment.campsiteId === campsiteId);
         return (
             <ScrollView>
-                <RenderCampsite campsite={campsite} 
-                favorite={this.state.favorite}
-                markFavorite={() => this.markFavorite()}
+                <RenderCampsite campsite={campsite}
+                    favorite={this.state.favorite}
+                    markFavorite={() => this.markFavorite()}
                 />
                 <RenderComments comments={comments} />
-            </ScrollView>
+            </ScrollView>  
         );
     }
 }

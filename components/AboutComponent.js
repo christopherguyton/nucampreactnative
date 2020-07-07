@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import { ScrollView, FlatList, Text  } from 'react-native';
+import React, { Component } from 'react';
+import { ScrollView, Text, FlatList } from 'react-native';
+import { Card, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
-import {baseUrl} from '../shared/baseUrl';
-import { ListItem, Card } from 'react-native-elements';
+import { baseUrl } from '../shared/baseUrl';
 
 const mapStateToProps = state => {
     return {
-        partners: state.partners
+      partners: state.partners
     };
 };
 
@@ -33,7 +33,7 @@ class About extends Component {
                 <ListItem
                 title={item.name}
                 subtitle={item.description}
-                leftAvatar={{ source: {uri: baseUrl + item.image}}}
+                leftAvatar={{source: {uri: baseUrl + item.image}}}
                 />
                 
             );
@@ -42,11 +42,11 @@ class About extends Component {
             <ScrollView>
             <Mission/>
             <Card title="Community Partners">
-            <FlatList
+            <FlatList 
             data={this.props.partners.partners}
             renderItem={renderPartner}
-            keyExtractor={item => item.id.toString()}>
-            </FlatList>
+            keyExtractor={item => item.id.toString()}
+            />
             </Card>
             </ScrollView>
         )
