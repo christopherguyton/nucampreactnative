@@ -1,14 +1,8 @@
 import React, { Component } from "react";
 import * as Animatable from 'react-native-animatable';
-import {
-  Text,
-  View,
-  ScrollView,
-  FlatList,
-  Modal,
-  Button,
-  StyleSheet, Alert, PanResponder
-} from "react-native";
+import { Text, View, ScrollView, FlatList,
+  Modal, Button, StyleSheet,
+  Alert, PanResponder, Share } from 'react-native';
 import { Card, Icon, Rating, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
@@ -23,6 +17,17 @@ const mapStateToProps = (state) => {
   };
 };
 
+const shareCampsite = (title, message, url) => {
+  Share.share({
+      title: title,
+      message: `${title}: ${message} ${url}`,
+      url: url
+  },{
+      dialogTitle: 'Share ' + title
+  });
+};
+
+
 const mapDispatchToProps = {
   postFavorite: (campsiteId) => postFavorite(campsiteId),
   postComment: (campsiteId, rating, author, text) => postComment(campsiteId, rating, author, text)
@@ -34,6 +39,7 @@ function RenderCampsite(props) {
   const view = React.createRef();
 
   const recognizeDrag = ({dx}) => (dx < -200) ? true : false;
+  const recognizeComment = ({dx}) => (dx > 200) ? true : false; 
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -42,6 +48,7 @@ function RenderCampsite(props) {
     .then(endState => console.log(endState.finished ? 'finished' : 'canceled'));
     },
     onPanResponderEnd: (e, gestureState) => {
+
       console.log('pan responser end', gestureState)
       if (recognizeDrag(gestureState)) {
         Alert.alert(
@@ -62,6 +69,11 @@ function RenderCampsite(props) {
           { cancelable: false}
         );
       }
+      else if 
+        (recognizeComment(gestureState)){
+          console.log('you dragged from left to right > 200 units!');
+          props.onShowModal();
+        }
       return true;
     }
   });
@@ -92,13 +104,23 @@ function RenderCampsite(props) {
             }
           />
           <Icon style={styles.cardItem}
-            name="pencil"
+            name={"pencil"}
             type="font-awesome"
             color="#5637DD"
             raised
             reverse
             onPress={() => props.onShowModal()}
           />
+
+          <Icon
+          name={'share'}
+          type='font-awesome'
+          color='#5637DD'
+          style={styles.cardItem}
+          raised
+          reverse
+          onPress={() => shareCampsite(campsite.name, campsite.description, baseUrl + campsite.image)} 
+      />
         </View>
         </Card>
         </Animatable.View>
